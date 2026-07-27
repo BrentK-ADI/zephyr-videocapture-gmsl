@@ -92,6 +92,14 @@ should have illuminated status and power LEDs.
 Connect the STM32N6570-DK (STLINK) to your PC, or if already connected, press the
 board's reset button.  Live camera video should be displayed on the LCD at startup.
 
+#### Camera Control
+
+There are 2 push buttons on the STM32N6570-DK, `TAMP` and `USER1`. These have been
+assigned to control the camera Gain and Exposure respectively.  Each button push
+steps the respective control higher. Once the maximum is reached, the value is
+reset back towards the lowest to create a cyclic control.  Each control is divided
+into 5 steps covering the full range of values.
+
 #### Zephyr Shell
 
 The Zephyr shell is available via the STM32 STLINK virtual UART.  The application

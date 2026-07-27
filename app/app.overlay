@@ -35,3 +35,20 @@
         reg = <0x27>;
     };
 };
+
+/* Reassign User Button to 'E' for exposure */
+&user_button {
+    zephyr,code = <INPUT_KEY_E>;
+};
+
+/ {
+    extra_keys {
+        compatible = "gpio-keys";
+        /* Add the tamper button and use it for gain */
+        tamp_button: tamper_button {
+            label = "Tamp";
+            gpios = <&gpioe 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+            zephyr,code = <INPUT_KEY_G>;
+        };
+    };
+};
