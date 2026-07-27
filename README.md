@@ -100,6 +100,16 @@ steps the respective control higher. Once the maximum is reached, the value is
 reset back towards the lowest to create a cyclic control.  Each control is divided
 into 5 steps covering the full range of values.
 
+#### Auto White Balance
+
+The project implements the gray world Auto White Balance (AWB) algorithm leveraging
+the STM32N6570's integrated ISP in the video pipeline.  The statistics capture
+block extracts the accumulator values for R, G and B prior to the demosaic and
+exposure blocks, calculates a gain for R and B, then adjusts the exposure block,
+which acts as a digital gain, to correct the color.
+
+The is enabled by default via the ISP_AWB KConfig option.
+
 #### Zephyr Shell
 
 The Zephyr shell is available via the STM32 STLINK virtual UART.  The application

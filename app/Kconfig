@@ -49,6 +49,14 @@ config VIDEO_VFLIP
 	bool "Vertical flip"
 	default n
 
+config ISP_AWB
+	bool "Auto White Balance"
+	default y
+
+config ISP_AWB_INTERVAL
+	int "Auto white balance update interval (frames)"
+	default 4
+
 endmenu
 
 source "Kconfig.zephyr"
