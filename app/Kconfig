@@ -57,6 +57,10 @@ config ISP_AWB_INTERVAL
 	int "Auto white balance update interval (frames)"
 	default 4
 
+config GMSL_DESER_DUPLICATE
+	bool "Duplicate the camera output on both GMSL deserializer CSI ports"
+	default y
+
 endmenu
 
 source "Kconfig.zephyr"
