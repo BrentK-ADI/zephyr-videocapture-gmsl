@@ -27,7 +27,7 @@
 &csi_i2c {
     gmsl_ser: max96717@40 {
         compatible = "adi,max96717";
-        reg = <0x40>;
+        reg = <0x42>;
     };
 
     gmsl_deser: max96724@27 {

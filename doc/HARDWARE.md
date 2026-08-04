@@ -43,7 +43,7 @@ configuration parameters.  Utilize the GMSL GUI, available on the [MAX97624F](ht
 
 | CFG | Value | Description |
 | --- | ----- | ----------- |
-| CFG0 | 0 | I2C, ROR, Addr 0x80 |
+| CFG1 | 0 | I2C, ROR, Addr 0x84 |
 | CFG1 | 5 | Coax, 6Gbps, Tunnel |
 
 ### MAX96724F-AAK
