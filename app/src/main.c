@@ -53,6 +53,9 @@ int main(void)
 		return 0;
 	}
 
+	/* Take I2C ownership until init is complete */
+	gmsl_set_i2c_ctrl(true);
+
 	/* Camera initialization deferred until GMSL is running */
 	camera_dev = DEVICE_DT_GET(DT_CHOSEN(camera_sensor));
 	device_init(camera_dev);
@@ -197,6 +200,9 @@ int main(void)
 		LOG_ERR("Failed to turn blanking off (error %d)", err);
 		return 0;
 	}
+
+	/* Return I2C ownership */
+	gmsl_set_i2c_ctrl(false);
 
 	const lv_img_dsc_t video_img = {
 		.header.w = CONFIG_VIDEO_WIDTH,

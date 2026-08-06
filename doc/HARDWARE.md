@@ -33,6 +33,8 @@ Solder bridge or install a 0 Ohm resistor on the following reference designators
 | R89    | Connect MFP5 to the sensor interface connector |
 | R91    | Connect MFP0 to the sensor interface connector |
 
+(Optional) Install a header pin on TP2 for software control of the I2C Mux.
+
 ## Bootstrap Configurations
 
 The GMSL evaluation kits feature digipots to set the bootstrap pins for specific
@@ -85,6 +87,9 @@ shipped, and described in the respective User's Guides.
 | S1     | CAM2     | Enable CAM2 (P6) |
 | S3     | P6       | Slide towards P6. Enable 3.3V on CAM2 |
 
+> If using software control of the I2C mux, slide S1 to the CAM1 position and
+> connect the STM32N6570-DK to TP2 of the MAX96724F-BAK EvKit. The provided
+> device tree assigns PC7 (CN4 Pin 14 of the DK) for this purpose.
 
 ## Hardware Interconnect
 
@@ -95,6 +100,7 @@ shipped, and described in the respective User's Guides.
 | Deserializer Adapter P6 | STM32N6570-DK CN14 | 22-Pin Type A Ribbon |
 | MAX96724F-BAK J13 | | 12VDC Power Adapter (Provided in Kits) |
 | STM32N6570-DK CN6 (STLink) | Development PC | USB-C Flash & Terminal |
+| MAX96724F-BAK TP2 | STM32N6570-DK CN4-14 | GPIO Control of I2C MUX |
 
 Below is an illustration of the hardware interconnection for this application. In
 addition to the connections shown below, a 12VDC adapter is needed for the

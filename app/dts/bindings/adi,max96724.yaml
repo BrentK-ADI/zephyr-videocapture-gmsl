@@ -6,3 +6,11 @@ description: Mock device tree node to capture MAX96724 I2C configuration
 compatible: "adi,max96724"
 
 include: [i2c-device.yaml]
+
+properties:
+  i2c-mux-gpios:
+    type: phandle-array
+    required: false
+    description: |
+      The GPIO connected to the I2C mux controller on the MAX96724 EvKit (TP2)
+      for controlling the on-board I2C from software versus S1.

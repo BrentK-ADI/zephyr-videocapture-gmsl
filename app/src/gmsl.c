@@ -6,6 +6,7 @@
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
+#include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/i2c.h>
 #include <zephyr/logging/log.h>
 
@@ -30,6 +31,8 @@ BUILD_ASSERT(DT_NODE_HAS_COMPAT(DT_NODELABEL(gmsl_deser), adi_max96724),
 /* I2C Bus assignments for GMSL pulled from the device tree */
 static const struct i2c_dt_spec ser_i2c = I2C_DT_SPEC_GET(DT_NODELABEL(gmsl_ser));
 static const struct i2c_dt_spec deser_i2c = I2C_DT_SPEC_GET(DT_NODELABEL(gmsl_deser));
+static const struct gpio_dt_spec i2c_ctrl_gpio =
+	GPIO_DT_SPEC_GET_OR(DT_NODELABEL(gmsl_deser), i2c_mux_gpios, {0});
 
 /**
  * @brief Helper for reading a GMSL register value
@@ -95,7 +98,6 @@ static int gmsl_load_reg_table(const struct i2c_dt_spec *spec,
 	return 0;
 }
 
-
 int gmsl_init(void)
 {
 	int ret;
@@ -109,6 +111,14 @@ int gmsl_init(void)
 		LOG_ERR("Deserializer I2C bus not ready");
 		return -ENODEV;
 	}
+
+	if (!gpio_is_ready_dt(&i2c_ctrl_gpio)) {
+		LOG_INF("I2C control mux GPIO not provided or ready\n");
+	} else {
+		/* Take ownership at startup */
+		gpio_pin_configure_dt(&i2c_ctrl_gpio, GPIO_OUTPUT_ACTIVE);
+	}
+
 
 	ret = gmsl_load_reg_table(&deser_i2c, deser_max96724_link_init, ARRAY_SIZE(deser_max96724_link_init));
 	if (ret) {
@@ -149,6 +159,16 @@ int gmsl_init(void)
 	}
 	LOG_INF("Serializer Transmit Enable Complete");
 
+	gmsl_set_i2c_ctrl(false);
 	LOG_INF("GMSL init complete");
+	return 0;
+}
+
+int gmsl_set_i2c_ctrl(bool state)
+{
+	if (gpio_is_ready_dt(&i2c_ctrl_gpio)) {
+		return gpio_pin_set_dt(&i2c_ctrl_gpio, state ? 1 : 0);
+	}
+
 	return 0;
 }

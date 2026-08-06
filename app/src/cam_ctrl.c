@@ -3,6 +3,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
+#include "gmsl.h"
+
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/input/input.h>
@@ -33,11 +35,14 @@ static void camera_adj_handler(struct k_work *work)
 	struct video_control ctrl;
 	int32_t span, step;
 
+	/* Take control of the I2C for camera adjustments */
+	gmsl_set_i2c_ctrl(true);
+
 	query.dev = camera_dev;
 	query.id = cam_evt->ctrl_id;
 	if (video_query_ctrl(&query)) {
 		LOG_ERR("Failed to query control");
-		return;
+		goto release_control;
 	}
 
 	span = query.range.max - query.range.min;
@@ -46,7 +51,7 @@ static void camera_adj_handler(struct k_work *work)
 	ctrl.id = cam_evt->ctrl_id;
 	if (video_get_ctrl(camera_dev, &ctrl)) {
 		LOG_ERR("Failed to get control");
-		return;
+		goto release_control;
 	}
 
 	ctrl.val = ctrl.val + step;
@@ -57,8 +62,11 @@ static void camera_adj_handler(struct k_work *work)
 
 	if (video_set_ctrl(camera_dev, &ctrl)) {
 		LOG_ERR("Failed to set control");
-		return;
+		goto release_control;
 	}
+
+	release_control:
+		gmsl_set_i2c_ctrl(false);
 }
 
 static void button_input_cb(struct input_event *evt, void *user_data)
